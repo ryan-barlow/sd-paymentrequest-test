@@ -624,7 +624,8 @@ $(function() {
 </script>
 <![endif]-->
 <div id="dnn_SD_BASKETSUMMARY1_divWishList" class="WishList hidden-xs">
-    <a href="/Login?addto=wishlist&amp;returnurl=%2fnike-tanjun-trainers-ladies-274001%3fcolcode%3d27400102" id="aWishListLink" data-toggle="tooltip" title="My Wish List">
+    <a href="/Login?
+	     =wishlist&amp;returnurl=%2fnike-tanjun-trainers-ladies-274001%3fcolcode%3d27400102" id="aWishListLink" data-toggle="tooltip" title="My Wish List">
         <span class="WishIcon"></span>
         <span id="lblWishList">Wish List</span>
         <span id="lblWishListCount" class="HideWishList">0</span>
@@ -1913,6 +1914,14 @@ var productSuggestData = {    apiMethod: "GetProductSuggestions",    idParamName
         <script src="/portals/sd/bundles/5492/js/footer/responsiveskin.js?cdv=632636" type="text/javascript"></script><script src="/portals/sd/bundles/5492/js/footer/template4-multicol-prodcat_76_116_1255_1273.js?cdv=632636" type="text/javascript"></script>
     </form>
     
+<script>
+    if(window.PaymentRequest) { 
+        var btnHtml = "<a " +
+            "style='display: block; background: #54b870; text-align: center; color: #FFF; font-size: 15px; margin-top: 10px; height: 57px; line-height: 57px;' " +
+            "href='#' onclick=''>Buy now</a>";
     
-</body>
+        $(".addToBasketContainer").after(btnHtml);
+    }
+	</script>
+	</body>
 </html><!--CT=19/08/17 20:36:24--><!--From Cache 19/08/2017 20:57:08-->
