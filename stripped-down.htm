@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html  xml:lang="en-GB" lang="en-GB" xmlns="http://www.w3.org/1999/xhtml">
+<html xml:lang="en-GB" lang="en-GB" xmlns="http://www.w3.org/1999/xhtml">
 <head id="Head">
 <script
   src="https://code.jquery.com/jquery-1.12.4.min.js"
@@ -71,7 +71,12 @@ function onBuyClicked() {
     displayItems: [{
       label: 'Nike Tanjun Trainers Ladies (Grey/White UK Size 3) - RRP',
       amount: { currency: 'GBP', value: '54.99' }
-    }, {
+    }
+, {
+      label: 'Standard delivery (1-3 working days)',
+      amount: { currency: 'GBP', value: '0.00' }
+    }
+, {
       label: 'Savings today',
       amount: { currency: 'GBP', value: '-10.00' }
     }],
@@ -99,12 +104,41 @@ var options = {requestShipping: true};
   // 1. Create a `PaymentRequest` instance
   var request = new PaymentRequest(supportedInstruments, details, options);
 
+ request.addEventListener('shippingaddresschange', function(evt) {
+    evt.updateWith(Promise.resolve(details));
+  });
+
+  request.addEventListener('shippingoptionchange', function(evt) {
+    evt.updateWith(new Promise(function(resolve, reject) {
+      updateDetails(details, request.shippingOption, resolve, reject);
+    }));
+  });
+
 // 2. Show the native UI with `.show()`
 request.show().then(function(instrumentResponse) {
     sendPaymentToServer(instrumentResponse);
   });
 
 }	
+
+function updateDetails(details, shippingOption, resolve, reject) {
+  if (shippingOption === 'standard') {
+    selectedShippingOption = details.shippingOptions[0];
+    otherShippingOption = details.shippingOptions[1];
+    details.total.amount.value = '44.99';
+  } else if (shippingOption === 'nextDay') {
+    selectedShippingOption = details.shippingOptions[1];
+    otherShippingOption = details.shippingOptions[0];
+    details.total.amount.value = '50.98';
+  } else {
+    reject('Unknown shipping option \'' + shippingOption + '\'');
+    return;
+  }
+  selectedShippingOption.selected = true;
+  otherShippingOption.selected = false;
+  details.displayItems.splice(2, 1, selectedShippingOption);
+  resolve(details);
+}
 
 function sendPaymentToServer(instrumentResponse) {
   // There's no server-side component of these samples. No transactions are
